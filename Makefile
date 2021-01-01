@@ -12,16 +12,17 @@ DGRMS=$(notdir $(wildcard $(DGRMDIR)/*.m4))
 PLOTS=$(notdir $(wildcard $(PLOTDIR)/*.gp))
 PLOTDEPS=$(patsubst %.gp, %.tex, $(PLOTS))
 DGRMDEPS=$(patsubst %.m4, %.tex, $(DGRMS))
-OUTPDF=$(patsubst %.md, %.pdf, $(wildcard *.md))
+
+SRCS=$(filter-out README.md, $(wildcard *.md))
+OUTPDFS=$(patsubst %.md, %.pdf, $(SRCS))
 
 PANDOCFLAGS=--template=$(TEMPLATE) --number-sections \
             --citeproc --bibliography=$(REFERENCES)  \
 			--csl=$(CSL)
 
-
 .PRECIOUS: $(DGRMDEPS) $(PLOTDEPS)
 
-all: $(OUTPDF)
+all: $(OUTPDFS)
 figs: $(DGRMDEPS) $(PLOTDEPS)
 
 %.pdf: %.tex $(DGRMDEPS) $(PLOTDEPS)
@@ -44,4 +45,5 @@ print-%: ; @echo $* = $($*)
 .PHONY: all figs clean
 
 clean:
-	rm -f $(DGRMDEPS) $(PLOTDEPS) *.pdf *.aux *.fls *.toc *.fdb_latexmk *.log *.out
+	rm -f $(DGRMDEPS) $(PLOTDEPS) $(OUTPDFS)
+	latexmk -f -C $(OUTPDFS) 2>/dev/null
