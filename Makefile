@@ -16,9 +16,9 @@ DGRMDEPS=$(patsubst %.m4, %.tex, $(DGRMS))
 SRCS=$(filter-out README.md, $(wildcard *.md))
 OUTPDFS=$(patsubst %.md, %.pdf, $(SRCS))
 
-PANDOCFLAGS=--template=$(TEMPLATE) --number-sections \
-            --citeproc --bibliography=$(REFERENCES)  \
-			--csl=$(CSL)
+PANDOCFLAGS=--template=$(TEMPLATE)                               \
+            --number-sections                                    \
+            --citeproc --bibliography=$(REFERENCES) --csl=$(CSL) \
 
 .PRECIOUS: $(DGRMDEPS) $(PLOTDEPS)
 
